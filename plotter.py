@@ -7,7 +7,7 @@ from matplotlib.animation import FuncAnimation # importa la classe FuncAnimation
 # Apre la comunicazione sulla porta COM3
 ser = serial.Serial('COM3')
 
-N = 100 # numero di dati
+N = 50 # numero di dati
 
 # Inizializzazione delle serie di dati come array vuoti di dimensione N
 ts = np.empty(N) # tempi
@@ -58,14 +58,12 @@ fig.tight_layout(rect=[0, 0, 1, 0.9])
 def gen_data():
     for i in range(N):
         raw_data_line = ser.readline().decode('ascii')
-        t, r, I = list(map(lambda x: float(x), raw_data_line.split(' ')))
-        rerr = 0.3
-        Ierr = (1 + I)**2 / 1024
-        yield i, t, r, I, rerr, Ierr
+        t, r, rerr, I, Ierr = list(map(lambda x: float(x), raw_data_line.split(' ')))
+        yield i, t, r, rerr, I, Ierr
 
 # Definizione della funzione che aggiorna i dati
 def update(data):
-    i, t, r, I, rerr, Ierr = data
+    i, t, r, rerr, I, Ierr = data
     ts[i], rs[i], Is[i] = t, r, I
 
     p1, errbars1, (ybars1, ) = err1
