@@ -1,2 +1,9 @@
 env
+
 ipynb_checkpoints
+
+*.log
+*.aux
+*.out
+
+*~
