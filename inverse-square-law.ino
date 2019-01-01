@@ -15,15 +15,16 @@ void loop() {
   int photocellValue = analogRead(photocellPin); // lettura della fotoresistenza
   float V = photocellValue * 5.0 / 1023.0; // conversione in tensione
   float intensity = V / (5.0 - V); // conversione in intensità adimensionale
-  float intensity_err = 5.0 * 5.0 / 1023.0 / ((5.0 - V) * (5.0 - V)); // calcolo dell'incertezza sull'intensità
+  float intensity_err = 0.024 / ((5.0 - V) * (5.0 - V)); // incertezza
   digitalWrite(triggerPin, LOW);
   digitalWrite(triggerPin, HIGH);
   delayMicroseconds(10);
   digitalWrite(triggerPin, LOW);
-  float dt = pulseIn(echoPin, HIGH); // lettura del tempo di andata e ritorno del segnale
+  float dt = pulseIn(echoPin, HIGH); // lettura del tempo di andata e ritorno
   float distance = speedOfSound * dt / 2; // calcolo della distanza
-  float distance_err = 0.3; // incertezza sulla misura di distanza
-  if (distance > 2 && distance < 400) { // controllo che il valore sia nel range di sensibilità
+  float distance_err = 0.3; // incertezza
+   // controlla che il valore sia nel range di sensibilità, quindi stampa le misure
+  if (distance > 2 && distance < 400) {
     Serial.print(t);
     Serial.print(" ");
     Serial.print(distance, 1);
